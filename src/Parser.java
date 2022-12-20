@@ -13,7 +13,7 @@ public class Parser {
         ArrayList<MonthlyReportItem> items = new ArrayList<>();
         System.out.println("\tФайл: " + file);
         String[] linesFile = file.split("\\.");
-        String monthNumberInName = linesFile[3];
+        String monthNumberInName = linesFile[linesFile.length - 2];
         int monthNumber = Integer.parseInt(monthNumberInName) % 100;
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i);
@@ -36,7 +36,7 @@ public class Parser {
         ArrayList<YearlyReportItem> items = new ArrayList<>();
         System.out.println("\tФайл: " + file);
         String[] linesFile = file.split("\\.");
-        String yearNumberInName = linesFile[3];
+        String yearNumberInName = linesFile[linesFile.length - 2];
         int year = Integer.parseInt(yearNumberInName);
         for (int i = 1; i < lines.size(); i ++) {
             String line = lines.get(i);

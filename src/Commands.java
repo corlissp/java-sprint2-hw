@@ -1,3 +1,5 @@
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Commands {
@@ -9,17 +11,24 @@ public class Commands {
     }
 
     public void readAndSaveMonthlyReports() {
+        Path path = Paths.get("resources");
+        Path absPath = path.toAbsolutePath();
         for (int i = 1; i <= 3; i ++) {
-            MonthlyReport report = Parser.readMonthlyReport("../resources/m.20210" + i + ".csv");
+            MonthlyReport report = Parser.readMonthlyReport(absPath + "\\m.20210" + i + ".csv");
             monthlyReports.add(report);
         }
     }
 
     public void readAndSaveYearlyReports() {
-        yearlyReport = Parser.readYearlyReport("../resources/y.2021.csv");
+        Path path = Paths.get("resources");
+        Path absPath = path.toAbsolutePath();
+        yearlyReport = Parser.readYearlyReport(absPath + "\\y.2021.csv");
     }
 
     public void checkingReports() {
+        if (!checkErrorMonth() || !checkErrorYear()) {
+            return;
+        }
         boolean errors = false;
         for (int i = 0; i < monthlyReports.size(); i++) {
             MonthlyReport month = monthlyReports.get(i);
@@ -39,6 +48,9 @@ public class Commands {
     }
 
     public void outputMonthlyReports() {
+        if (!checkErrorMonth()) {
+            return;
+        }
         for (int i = 0; i < 3; i++) {
             MonthlyReport month = monthlyReports.get(i);
             System.out.println(month.ParseMonthNumber() + ":");
@@ -49,9 +61,28 @@ public class Commands {
     }
 
     public void outputYearlyReport() {
+        if (!checkErrorYear()) {
+            return;
+        }
         System.out.println("Год: " + yearlyReport.year);
         yearlyReport.profitReport();
         System.out.println("Средний расход за год: " + yearlyReport.avgExpense());
         System.out.println("Средний доход за год: " + yearlyReport.avgIncome());
+    }
+
+    public boolean checkErrorYear() {
+        if (yearlyReport == null) {
+            System.out.println("Данные не считаны!\nНеобходимо считать данные и повторить попытку.");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkErrorMonth() {
+        if (monthlyReports.size() == 0) {
+            System.out.println("Данные не считаны!\nНеобходимо считать данные и повторить попытку.");
+            return false;
+        }
+            return true;
     }
 }
